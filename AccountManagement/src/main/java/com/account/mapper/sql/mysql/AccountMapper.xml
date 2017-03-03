@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4.3//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.account.mapper.AccountMapper">
+	<resultMap id="accountMap" type="com.account.domain.Account">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="remark" column="remark" />
+		<result property="state" column="state" />
+		<result property="type" column="type" />
+		<result property="createtime" column="createtime" />
+		<result property="lastloadtime" column="lastloadtime" />
+		<result property="start" column="start" />
+		<result property="end" column="end" />
+		<result property="sealed" column="sealed" />
+	</resultMap>
+	<select id="getAll" resultMap="accountMap" resultType="list">
+		select * from account where status=1
+	</select>
+	<insert id="add" parameterType="Account">
+		insert into account values(#{id},#{name},#{remark},#{state},#{type},#{createtime},#{lastloadtime},"1",true)
+	</insert>
+	<update id="deleteA">
+		update account set status=-1 where id=#{id}
+	</update>
+	<update id="sealed">
+		update account set sealed=#{sealed} where id=#{id}
+	</update>
+	<update id="modify" parameterType="Account">
+		update account set name=#{name},remark=#{remark},state=#{state},type=#{type}
+		 where id=#{id}
+	</update>
+	<select id="find" resultMap="accountMap" resultType="list">
+		select * from account where id like concat('%', #{id},'%')
+		 and name like concat('%', #{name},'%') and status=1
+	</select>
+	<select id="find1" resultMap="accountMap" resultType="list">
+		select * from account where id like concat('%', #{id},'%')
+		 and name like concat('%', #{name},'%')
+		 and type=#{type} and status=1
+	</select>
+	<select id="find2" resultMap="accountMap" resultType="list">
+		select * from account where id like concat('%', #{id},'%')
+		 and name like concat('%', #{name},'%') 
+		 and createtime&gt;=#{start} and createtime&lt;=#{end} and status=1
+	</select>
+	<select id="find3" resultMap="accountMap" resultType="list">
+		select * from account where id like concat('%', #{id},'%')
+		 and name like concat('%', #{name},'%') 
+		 and createtime&gt;=#{start} and createtime&lt;=#{end}
+		 and type=#{type} and status=1
+	</select>
+</mapper> 
